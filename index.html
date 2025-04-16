@@ -5,195 +5,219 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Electrofuel Order</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
-    body {
-      color: #fff;
-      font-family: 'Orbitron', sans-serif;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&family=Poppins:wght@600&display=swap');
+    
+    /* Global Reset */
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #6a5df1, #ff64f0);
+      font-family: 'Poppins', sans-serif;
+      color: white;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      overflow: hidden;
+      min-height: 100vh;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
     }
 
     h2 {
-      text-align: center;
-      font-size: 2.5em;
-      color: #00fff6;
-      text-shadow: 0 0 10px #00fff6, 0 0 20px #00fff6;
+      font-size: 3.5em;
+      font-weight: 600;
       margin-bottom: 20px;
+      background: linear-gradient(90deg, #ff64f0, #6a5df1);
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: 1.5px;
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
     }
 
     .container {
-      max-width: 700px;
       width: 100%;
-      background: #1c2638;
-      padding: 40px 30px;
-      border-radius: 25px;
-      box-shadow: 0 10px 40px rgba(0, 255, 231, 0.5);
-      backdrop-filter: blur(10px);
-      border: 2px solid rgba(0, 255, 231, 0.4);
-    }
-
-    label {
-      display: block;
-      margin-bottom: 10px;
-      font-size: 1.1em;
-      color: #e0f7ff;
-      font-weight: bold;
+      max-width: 900px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(20px);
+      border: 2px solid #ff64f0;
+      margin-top: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     input[type="text"] {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 20px;
-      background: #1c253e;
-      color: #fff;
+      width: 90%;
+      max-width: 350px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid #ff64f0;
       border-radius: 10px;
+      color: white;
       font-size: 1.1em;
-      box-shadow: 0 4px 10px rgba(0, 255, 231, 0.2);
-      border: 1px solid transparent;
+      outline: none;
+      margin-bottom: 20px;
       transition: 0.3s;
     }
 
     input[type="text"]:focus {
-      outline: none;
-      border-color: #00fff6;
-      box-shadow: 0 0 15px rgba(0, 255, 231, 0.5);
+      border-color: #ffffff;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
     }
 
-    .drinks-grid {
+    .drink-btns {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 15px;
-      margin-bottom: 20px;
+      width: 100%;
+      max-width: 600px;
+      margin-top: 30px;
     }
 
     .drink-btn {
-      background: #2c3b52;
-      padding: 15px;
+      background: #2e2e2e;
       border-radius: 15px;
-      text-align: center;
-      transition: 0.3s;
+      padding: 15px;
       cursor: pointer;
       position: relative;
       overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+      transition: all 0.3s ease;
     }
 
     .drink-btn:hover {
-      background: #005b79;
+      background: #ff64f0;
       transform: scale(1.05);
-      box-shadow: 0 0 15px rgba(0, 255, 231, 0.5);
+      box-shadow: 0 0 25px rgba(255, 100, 240, 0.5);
     }
 
     .drink-btn.selected {
-      background: #00414b;
+      background: #6a5df1;
+      transform: scale(1.05);
     }
 
     .drink-btn img {
       width: 100%;
-      height: 100px;
+      height: 120px;
       object-fit: cover;
-      border-radius: 12px;
-      box-shadow: 0 0 5px rgba(0, 255, 231, 0.3);
-      transition: 0.3s;
+      border-radius: 10px;
+      transition: all 0.3s ease;
     }
 
-    .drink-name {
-      font-size: 1em;
+    .drink-btn .drink-name {
+      font-size: 1.1em;
       color: #fff;
       margin-top: 10px;
-      font-weight: 600;
-      transition: color 0.3s;
+      font-weight: 500;
     }
 
     .action-btn {
-      width: 100%;
-      padding: 15px;
-      margin-top: 20px;
-      font-size: 1.2em;
-      background: linear-gradient(45deg, #00fff6, #00e5c5);
+      margin-top: 30px;
+      padding: 15px 30px;
+      background: #ff64f0;
+      color: white;
+      font-size: 1.3em;
       border: none;
-      color: #111;
-      border-radius: 10px;
+      border-radius: 30px;
+      box-shadow: 0 6px 20px rgba(255, 100, 240, 0.6);
       cursor: pointer;
       transition: all 0.3s ease;
     }
 
     .action-btn:hover {
+      background: #6a5df1;
+      box-shadow: 0 6px 20px rgba(106, 93, 241, 0.6);
       transform: scale(1.05);
-      box-shadow: 0 0 25px rgba(0, 255, 231, 0.5);
     }
 
-    ul {
+    .order-list {
+      width: 100%;
+      max-width: 500px;
+      margin-top: 30px;
       list-style: none;
       padding: 0;
-      margin-top: 20px;
     }
 
-    li.order-item {
+    .order-item {
       background: rgba(255, 255, 255, 0.1);
       padding: 15px;
-      margin-bottom: 12px;
+      margin-bottom: 15px;
       border-radius: 15px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      color: #e0f7ff;
-      font-weight: 500;
-      font-size: 1.1em;
-      transition: 0.3s;
+      box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
     }
 
-    li.order-item strong {
-      color: #fff;
-    }
-
-    .delete-btn {
-      margin-left: 12px;
+    .order-item .delete-btn {
       background: #ff4d4d;
       border: none;
       color: white;
-      padding: 6px 10px;
-      border-radius: 10px;
-      font-size: 0.9em;
+      padding: 8px 15px;
+      font-size: 1.1em;
+      border-radius: 50px;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: 0.3s;
     }
 
-    .delete-btn:hover {
-      background: #ff0000;
+    .order-item .delete-btn:hover {
+      background: #ff1a1a;
+    }
+
+    .order-item .item-text {
+      font-size: 1.1em;
+      color: white;
+      font-weight: 600;
+    }
+
+    .order-item .item-note {
+      font-size: 0.9em;
+      color: #d1d1d1;
+      font-style: italic;
+    }
+
+    /* Animations */
+    .fade-in {
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
     }
   </style>
 </head>
 <body>
 
-  <h2>⚡ Electrofuel Order System ⚡</h2>
+  <h2>⚡ Electrofuel Order ⚡</h2>
 
   <div class="container">
-    <label>Customer Name:</label>
-    <input type="text" id="customerName" placeholder="Enter name...">
-
-    <label>Select Drink:</label>
-    <div class="drinks-grid" id="drinkButtons">
+    <input type="text" id="customerName" placeholder="Enter Your Name..." />
+    
+    <div class="drink-btns" id="drinkButtons">
       <!-- Populated by JS -->
     </div>
 
-    <label>Notes (optional):</label>
-    <input type="text" id="drinkNote" placeholder="e.g. less sugar, no ice...">
-
+    <input type="text" id="drinkNote" placeholder="Add a note..." />
+    
     <button class="action-btn" onclick="addToOrder()">➕ Add to Order</button>
 
-    <h3 style="margin-top: 30px;">🧾 Order Items:</h3>
-    <ul id="orderList"></ul>
+    <ul class="order-list" id="orderList"></ul>
 
     <button class="action-btn" onclick="submitOrder()">✅ Submit Order</button>
   </div>
 
-  <!-- ✅ Click sound -->
   <audio id="clickSound" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio>
 
   <script>
@@ -308,10 +332,11 @@
 
       order.items.forEach((item, index) => {
         const li = document.createElement("li");
-        li.classList.add("order-item");
+        li.classList.add("order-item", "fade-in");
 
         const itemText = document.createElement("span");
-        itemText.innerHTML = `🍹 <strong>${item.drink}</strong>${item.note ? ` – <em>${item.note}</em>` : ""}`;
+        itemText.classList.add("item-text");
+        itemText.innerHTML = `🍹 <strong>${item.drink}</strong>${item.note ? ` – <em class="item-note">${item.note}</em>` : ""}`;
         li.appendChild(itemText);
 
         const deleteButton = document.createElement("button");
@@ -321,7 +346,6 @@
         li.appendChild(deleteButton);
 
         ul.appendChild(li);
-        setTimeout(() => li.classList.add("fade-in"), 100);
       });
     }
 
@@ -335,3 +359,4 @@
   </script>
 </body>
 </html>
+
