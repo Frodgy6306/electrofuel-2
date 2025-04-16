@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Electrofuel Order</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&family=Poppins:wght@600&display=swap');
-    
-    /* Global Reset */
+    /* Resetting all styles */
     * {
       margin: 0;
       padding: 0;
@@ -15,210 +13,184 @@
     }
 
     body {
-      background: linear-gradient(135deg, #6a5df1, #ff64f0);
-      font-family: 'Poppins', sans-serif;
-      color: white;
+      background: linear-gradient(135deg, #ff0088, #8a2be2);
+      font-family: 'Arial', sans-serif;
+      color: #fff;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
       text-align: center;
-      padding: 20px;
     }
 
-    h2 {
-      font-size: 3.5em;
-      font-weight: 600;
-      margin-bottom: 20px;
-      background: linear-gradient(90deg, #ff64f0, #6a5df1);
+    h1 {
+      font-size: 3.5rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #fff;
+      background: linear-gradient(to right, #ff64f0, #6a5df1);
       -webkit-background-clip: text;
       color: transparent;
-      letter-spacing: 1.5px;
-      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+      letter-spacing: 3px;
+      padding: 20px;
+      margin-bottom: 40px;
+      text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.6);
+      animation: glowing 1.5s ease-in-out infinite alternate;
     }
 
-    .container {
-      width: 100%;
-      max-width: 900px;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
-      backdrop-filter: blur(20px);
-      border: 2px solid #ff64f0;
-      margin-top: 50px;
+    @keyframes glowing {
+      0% { text-shadow: 0 0 10px #ff64f0, 0 0 20px #ff64f0, 0 0 30px #ff64f0, 0 0 40px #ff64f0; }
+      100% { text-shadow: 0 0 30px #ff64f0, 0 0 60px #ff64f0, 0 0 90px #ff64f0, 0 0 120px #ff64f0; }
+    }
+
+    .order-container {
       display: flex;
       flex-direction: column;
       align-items: center;
+      background-color: rgba(0, 0, 0, 0.4);
+      border-radius: 30px;
+      padding: 40px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(20px);
     }
 
-    input[type="text"] {
-      width: 90%;
+    input[type="text"], .order-btn {
+      width: 100%;
       max-width: 350px;
       padding: 15px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 2px solid #ff64f0;
-      border-radius: 10px;
-      color: white;
-      font-size: 1.1em;
+      margin: 15px 0;
+      font-size: 1.2rem;
+      border-radius: 15px;
+      border: none;
       outline: none;
-      margin-bottom: 20px;
-      transition: 0.3s;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
     }
 
-    input[type="text"]:focus {
-      border-color: #ffffff;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    input[type="text"]:focus, .order-btn:hover {
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+      transform: scale(1.05);
     }
 
-    .drink-btns {
+    .menu-container {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
+      gap: 20px;
       width: 100%;
       max-width: 600px;
-      margin-top: 30px;
+      margin-bottom: 40px;
     }
 
-    .drink-btn {
-      background: #2e2e2e;
-      border-radius: 15px;
-      padding: 15px;
+    .menu-item {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 20px;
       cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
-      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: 0.3s ease;
     }
 
-    .drink-btn:hover {
-      background: #ff64f0;
-      transform: scale(1.05);
-      box-shadow: 0 0 25px rgba(255, 100, 240, 0.5);
-    }
-
-    .drink-btn.selected {
-      background: #6a5df1;
+    .menu-item:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
       transform: scale(1.05);
     }
 
-    .drink-btn img {
+    .menu-item img {
       width: 100%;
-      height: 120px;
-      object-fit: cover;
-      border-radius: 10px;
-      transition: all 0.3s ease;
+      height: auto;
+      border-radius: 15px;
+      margin-bottom: 15px;
     }
 
-    .drink-btn .drink-name {
-      font-size: 1.1em;
-      color: #fff;
-      margin-top: 10px;
-      font-weight: 500;
-    }
-
-    .action-btn {
-      margin-top: 30px;
-      padding: 15px 30px;
-      background: #ff64f0;
+    .menu-item .menu-name {
+      font-size: 1.3rem;
+      font-weight: bold;
       color: white;
-      font-size: 1.3em;
-      border: none;
-      border-radius: 30px;
-      box-shadow: 0 6px 20px rgba(255, 100, 240, 0.6);
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .action-btn:hover {
-      background: #6a5df1;
-      box-shadow: 0 6px 20px rgba(106, 93, 241, 0.6);
-      transform: scale(1.05);
     }
 
     .order-list {
       width: 100%;
       max-width: 500px;
-      margin-top: 30px;
       list-style: none;
       padding: 0;
+      margin-top: 20px;
     }
 
     .order-item {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 15px;
-      margin-bottom: 15px;
+      background-color: rgba(0, 0, 0, 0.2);
       border-radius: 15px;
+      padding: 15px;
+      margin-bottom: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .order-item .order-name {
+      font-size: 1.2rem;
+      color: white;
     }
 
     .order-item .delete-btn {
-      background: #ff4d4d;
+      background-color: #ff4d4d;
       border: none;
       color: white;
       padding: 8px 15px;
-      font-size: 1.1em;
+      font-size: 1.1rem;
       border-radius: 50px;
       cursor: pointer;
-      transition: 0.3s;
+      transition: 0.3s ease;
     }
 
     .order-item .delete-btn:hover {
-      background: #ff1a1a;
+      background-color: #ff1a1a;
+      transform: scale(1.05);
     }
 
-    .order-item .item-text {
-      font-size: 1.1em;
+    .confirm-btn {
+      margin-top: 30px;
+      padding: 15px 25px;
+      background-color: #ff64f0;
+      font-size: 1.3rem;
+      border-radius: 25px;
       color: white;
-      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s ease;
     }
 
-    .order-item .item-note {
-      font-size: 0.9em;
-      color: #d1d1d1;
-      font-style: italic;
-    }
-
-    /* Animations */
-    .fade-in {
-      animation: fadeIn 0.3s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
+    .confirm-btn:hover {
+      background-color: #ff2d92;
+      box-shadow: 0 8px 20px rgba(255, 100, 240, 0.6);
     }
   </style>
 </head>
 <body>
 
-  <h2>⚡ Electrofuel Order ⚡</h2>
+  <h1>⚡ Electrofuel Orders ⚡</h1>
 
-  <div class="container">
+  <div class="order-container">
     <input type="text" id="customerName" placeholder="Enter Your Name..." />
-    
-    <div class="drink-btns" id="drinkButtons">
-      <!-- Populated by JS -->
+
+    <div class="menu-container" id="menuItems">
+      <!-- Dynamic menu items here -->
     </div>
 
-    <input type="text" id="drinkNote" placeholder="Add a note..." />
-    
-    <button class="action-btn" onclick="addToOrder()">➕ Add to Order</button>
+    <input type="text" id="orderNote" placeholder="Add a note..." />
+
+    <button class="order-btn" onclick="addToOrder()">➕ Add to Order</button>
 
     <ul class="order-list" id="orderList"></ul>
 
-    <button class="action-btn" onclick="submitOrder()">✅ Submit Order</button>
+    <button class="confirm-btn" onclick="submitOrder()">✅ Submit Order</button>
   </div>
-
-  <audio id="clickSound" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio>
 
   <script>
     const drinks = [
@@ -237,33 +209,31 @@
 
     let selectedDrink = null;
 
-    function loadDrinks() {
-      const container = document.getElementById("drinkButtons");
+    function loadMenu() {
+      const menuContainer = document.getElementById('menuItems');
       drinks.forEach((drink, index) => {
-        const btn = document.createElement("div");
-        btn.className = "drink-btn";
-        btn.dataset.index = index;
+        const item = document.createElement('div');
+        item.classList.add('menu-item');
+        item.setAttribute('data-index', index);
 
-        btn.onclick = () => selectDrink(index);
-
-        btn.innerHTML = `
-          <img src="${drink.img}" alt="${drink.name}">
-          <div class="drink-name">${drink.name}</div>
+        item.innerHTML = `
+          <img src="${drink.img}" alt="${drink.name}" />
+          <div class="menu-name">${drink.name}</div>
         `;
-        container.appendChild(btn);
+
+        item.onclick = () => selectDrink(index);
+        menuContainer.appendChild(item);
       });
     }
 
     function selectDrink(index) {
       selectedDrink = index;
 
-      // Remove highlights
-      document.querySelectorAll('.drink-btn').forEach(btn => {
-        btn.classList.remove('selected');
-      });
+      // Remove the selection from all items
+      document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('selected'));
 
-      // Add highlight to selected
-      document.querySelector(`.drink-btn[data-index="${index}"]`).classList.add('selected');
+      // Highlight the selected item
+      document.querySelector(`.menu-item[data-index="${index}"]`).classList.add('selected');
     }
 
     function addToOrder() {
@@ -272,91 +242,65 @@
         return;
       }
 
-      const note = document.getElementById("drinkNote").value.trim();
+      const note = document.getElementById('orderNote').value.trim();
       const drink = drinks[selectedDrink].name;
 
       order.items.push({ drink, note });
       updateOrderList();
 
-      // Play click sound
-      const clickSound = document.getElementById("clickSound");
-      clickSound.currentTime = 0;
-      clickSound.play();
-
       // Reset for next item
       selectedDrink = null;
-      document.getElementById("drinkNote").value = "";
-      document.querySelectorAll('.drink-btn').forEach(btn => btn.classList.remove('selected'));
-    }
-
-    function submitOrder() {
-      const customer = document.getElementById("customerName").value.trim();
-      if (!customer) {
-        alert("Please enter customer name.");
-        return;
-      }
-
-      if (order.items.length === 0) {
-        alert("Add at least one item before submitting.");
-        return;
-      }
-
-      order.customer = customer;
-
-      // Sending the order data to the backend
-      fetch('https://fascinated-volcano-thief.glitch.me/order', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(order)
-      })
-      .then(response => response.json())  // Handle the response from the server
-      .then(data => {
-        alert(data.message);  // Show a success message from the backend
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('There was an error submitting your order.');
-      });
-
-      // Reset everything
-      order.items = [];
-      updateOrderList();
-      document.getElementById("customerName").value = "";
+      document.getElementById('orderNote').value = "";
+      document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('selected'));
     }
 
     function updateOrderList() {
-      const ul = document.getElementById("orderList");
-      ul.innerHTML = "";
+      const orderList = document.getElementById('orderList');
+      orderList.innerHTML = '';
 
       order.items.forEach((item, index) => {
-        const li = document.createElement("li");
-        li.classList.add("order-item", "fade-in");
-
-        const itemText = document.createElement("span");
-        itemText.classList.add("item-text");
-        itemText.innerHTML = `🍹 <strong>${item.drink}</strong>${item.note ? ` – <em class="item-note">${item.note}</em>` : ""}`;
-        li.appendChild(itemText);
-
-        const deleteButton = document.createElement("button");
-        deleteButton.textContent = "✖";
-        deleteButton.classList.add("delete-btn");
-        deleteButton.onclick = () => deleteItem(index);
-        li.appendChild(deleteButton);
-
-        ul.appendChild(li);
+        const li = document.createElement('li');
+        li.classList.add('order-item');
+        li.innerHTML = `
+          <span class="order-name">${item.drink}</span> 
+          <span>${item.note}</span>
+          <button class="delete-btn" onclick="removeFromOrder(${index})">✖</button>
+        `;
+        orderList.appendChild(li);
       });
     }
 
-    function deleteItem(index) {
+    function removeFromOrder(index) {
       order.items.splice(index, 1);
       updateOrderList();
     }
 
-    // Load drinks when the page is ready
-    loadDrinks();
+    function submitOrder() {
+      const customerName = document.getElementById('customerName').value.trim();
+      if (!customerName) {
+        alert("Please enter your name.");
+        return;
+      }
+
+      if (order.items.length === 0) {
+        alert("Please add at least one drink to your order.");
+        return;
+      }
+
+      order.customer = customerName;
+
+      console.log("Submitting order:", order);
+      alert("Your order has been submitted!");
+
+      // Reset the order
+      order.items = [];
+      updateOrderList();
+      document.getElementById('customerName').value = '';
+    }
+
+    // Load the menu items
+    loadMenu();
   </script>
+
 </body>
 </html>
-
