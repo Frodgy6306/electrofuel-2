@@ -175,7 +175,9 @@
     <input type="text" id="customerName" placeholder="Enter name...">
 
     <label>Select Drink:</label>
-    <div class="drinks-grid" id="drinkButtons"></div>
+    <div class="drinks-grid" id="drinkButtons">
+      <!-- Populated by JS -->
+    </div>
 
     <label>Notes (optional):</label>
     <input type="text" id="drinkNote" placeholder="e.g. less sugar, no ice...">
@@ -192,12 +194,12 @@
 
   <script>
     const drinks = [
-      { name: "Dango", img: "images/dango.png" },
-      { name: "NPC", img: "images/npc.png" },
-      { name: "Sigma", img: "images/sigma.png" },
-      { name: "Alpha", img: "images/alpha.png" },
-      { name: "Jagung Susu", img: "images/jagung_susu.png" },
-      { name: "StickyMilk Matcha", img: "images/stickymilk_matcha.png" }
+      { name: "Dango", img: "https://i.imgur.com/XxI9mU8.jpg" },
+      { name: "NPC", img: "https://i.imgur.com/VgLk0Dw.jpg" },
+      { name: "Sigma", img: "https://i.imgur.com/vg2f7RU.jpg" },
+      { name: "Alpha", img: "https://i.imgur.com/GUZrx1d.jpg" },
+      { name: "Jagung Susu", img: "https://i.imgur.com/gE8qMgN.jpg" },
+      { name: "StickyMilk Matcha", img: "https://i.imgur.com/0kpY6zE.jpg" }
     ];
 
     const order = {
@@ -244,9 +246,7 @@
       order.items.push({ drink, note });
       updateOrderList();
 
-      const clickSound = document.getElementById("clickSound");
-      clickSound.currentTime = 0;
-      clickSound.play();
+      document.getElementById("clickSound").play();
 
       selectedDrink = null;
       document.getElementById("drinkNote").value = "";
@@ -267,25 +267,27 @@
 
       order.customer = customer;
 
-      fetch('https://fascinated-volcano-thief.glitch.me/order', {
-        method: 'POST',
+      fetch("https://fascinated-volcano-thief.glitch.me/order", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json"
         },
         body: JSON.stringify(order)
       })
-      .then(response => response.json())
-      .then(data => {
-        alert(data.message);
+      .then(res => {
+        if (!res.ok) throw new Error("Network error");
+        return res.text();
       })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('There was an error submitting your order.');
+      .then(msg => {
+        alert("✅ Order submitted for " + order.customer + "!");
+        order.items = [];
+        updateOrderList();
+        document.getElementById("customerName").value = "";
+      })
+      .catch(err => {
+        console.error(err);
+        alert("⚠️ Failed to submit order. Please try again.");
       });
-
-      order.items = [];
-      updateOrderList();
-      document.getElementById("customerName").value = "";
     }
 
     function updateOrderList() {
@@ -307,7 +309,7 @@
         li.appendChild(deleteButton);
 
         ul.appendChild(li);
-        setTimeout(() => li.classList.add("fade-in"), 100);
+        setTimeout(() => li.classList.add("fade-in"), 10);
       });
     }
 
@@ -316,7 +318,8 @@
       updateOrderList();
     }
 
-    loadDrinks();
+    window.onload = loadDrinks;
   </script>
+
 </body>
 </html>
