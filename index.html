@@ -5,104 +5,89 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Electrofuel Order</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
 
     body {
-      color: #fff;
-      font-family: 'Poppins', sans-serif;
+      color: #e0f7ff;
+      font-family: 'Orbitron', sans-serif;
       margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #00bfff, #8a2be2); /* Gradient background */
-      height: 100vh;
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-start;
-      flex-direction: column;
-      padding-top: 50px; /* Ensure space for the title */
+      padding: 20px;
+      background-color: #1b2a3d;
     }
 
     h2 {
       text-align: center;
-      font-size: 2.5em;
-      color: #ffffff;
-      text-shadow: 0 0 8px #8a2be2;
-      margin-top: 0;
-      width: 100%;
-      position: relative;
+      font-size: 2em;
+      color: #00ffe7;
+      text-shadow: 0 0 10px #00ffe7;
     }
 
     .container {
-      width: 90%;
-      max-width: 500px;
+      max-width: 700px;
+      margin: auto;
+      background: #222e44;
       padding: 20px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
-      backdrop-filter: blur(10px);
-      margin-top: 20px; /* Adjust space below title */
+      border-radius: 20px;
+      box-shadow: 0 0 20px #00ffe766;
     }
 
     label {
       display: block;
-      margin-top: 10px;
-      font-weight: 600;
-      color: #8a2be2;
-      font-size: 1.1em;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #aeeeff;
     }
 
     input[type="text"] {
       width: 100%;
-      padding: 12px;
+      padding: 10px;
       margin-top: 5px;
       border: none;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      background: #1c253e;
       color: #fff;
       font-size: 1em;
-      box-shadow: 0 0 8px #8a2be2;
-      margin-bottom: 15px;
+      box-shadow: 0 0 5px #00ffe7;
     }
 
     .drinks-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 10px;
       margin-top: 15px;
     }
 
     .drink-btn {
-      background-color: #fff;
-      border-radius: 50%;
-      padding: 15px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background-color: #1c253e;
+      border: 2px solid #00ffe7;
+      border-radius: 12px;
+      padding: 10px;
       cursor: pointer;
-      box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
-      transition: transform 0.2s ease;
-      position: relative;
-      overflow: hidden;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .drink-btn:hover {
-      transform: scale(1.1);
+      transform: scale(1.05);
+      box-shadow: 0 0 10px #00ffe7;
+    }
+
+    .drink-btn.selected {
+      box-shadow: 0 0 20px #00ffe7;
+      background: #1f2c4d;
     }
 
     .drink-btn img {
-      width: 60px;
-      height: 60px;
+      width: 100%;
+      height: 80px;
       object-fit: cover;
+      border-radius: 8px;
     }
 
     .drink-name {
-      position: absolute;
-      bottom: 10px;
-      width: 100%;
-      text-align: center;
-      color: #8a2be2;
-      font-size: 1em;
-      font-weight: 600;
-      margin-top: 10px;
+      margin-top: 5px;
+      color: #e0f7ff;
+      font-weight: bold;
     }
 
     button.action-btn {
@@ -179,13 +164,6 @@
     .delete-btn:hover {
       background-color: #ff1e1e;
     }
-
-    @media (max-width: 600px) {
-      .drinks-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
   </style>
 </head>
 <body>
@@ -198,19 +176,7 @@
 
     <label>Select Drink:</label>
     <div class="drinks-grid" id="drinkButtons">
-      <!-- Placeholder buttons for drinks -->
-      <div class="drink-btn">
-        <img src="https://via.placeholder.com/100" alt="Drink 1">
-        <div class="drink-name">Dango</div>
-      </div>
-      <div class="drink-btn">
-        <img src="https://via.placeholder.com/100" alt="Drink 2">
-        <div class="drink-name">NPC</div>
-      </div>
-      <div class="drink-btn">
-        <img src="https://via.placeholder.com/100" alt="Drink 3">
-        <div class="drink-name">Sigma</div>
-      </div>
+      <!-- Populated by JS -->
     </div>
 
     <label>Notes (optional):</label>
@@ -228,12 +194,12 @@
 
   <script>
     const drinks = [
-      { name: "Dango", img: "https://via.placeholder.com/100" },
-      { name: "NPC", img: "https://via.placeholder.com/100" },
-      { name: "Sigma", img: "https://via.placeholder.com/100" },
-      { name: "Alpha", img: "https://via.placeholder.com/100" },
-      { name: "Jagung Susu", img: "https://via.placeholder.com/100" },
-      { name: "StickyMilk Matcha", img: "https://via.placeholder.com/100" }
+      { name: "Dango", img: "https://i.imgur.com/XxI9mU8.jpg" },
+      { name: "NPC", img: "https://i.imgur.com/VgLk0Dw.jpg" },
+      { name: "Sigma", img: "https://i.imgur.com/vg2f7RU.jpg" },
+      { name: "Alpha", img: "https://i.imgur.com/GUZrx1d.jpg" },
+      { name: "Jagung Susu", img: "https://i.imgur.com/gE8qMgN.jpg" },
+      { name: "StickyMilk Matcha", img: "https://i.imgur.com/0kpY6zE.jpg" }
     ];
 
     const order = {
@@ -308,15 +274,13 @@
         },
         body: JSON.stringify(order)
       })
-      .then(res => {
-        if (!res.ok) throw new Error("Network error");
-        return res.text();
-      })
+      .then(res => res.json())  // Corrected to handle the response as JSON
       .then(msg => {
+        console.log(msg);  // Log the response message for debugging
         alert("✅ Order submitted for " + order.customer + "!");
-        order.items = [];
-        updateOrderList();
-        document.getElementById("customerName").value = "";
+        order.items = [];  // Clear the order list
+        updateOrderList();  // Update the order UI
+        document.getElementById("customerName").value = "";  // Clear the name input field
       })
       .catch(err => {
         console.error(err);
@@ -330,29 +294,25 @@
 
       order.items.forEach((item, index) => {
         const li = document.createElement("li");
-        li.classList.add("order-item");
-
-        const itemText = document.createElement("span");
-        itemText.innerHTML = `🍹 <strong>${item.drink}</strong>${item.note ? ` – <em>${item.note}</em>` : ""}`;
-        li.appendChild(itemText);
-
-        const deleteButton = document.createElement("button");
-        deleteButton.textContent = "✖";
-        deleteButton.classList.add("delete-btn");
-        deleteButton.onclick = () => deleteItem(index);
-        li.appendChild(deleteButton);
-
+        li.className = "order-item";
+        li.innerHTML = `
+          <div><strong>${item.drink}</strong> <em>(${item.note})</em></div>
+          <button class="delete-btn" onclick="removeOrderItem(${index})">❌</button>
+        `;
         ul.appendChild(li);
-        setTimeout(() => li.classList.add("fade-in"), 10);
+
+        setTimeout(() => {
+          li.classList.add('fade-in');
+        }, 100);
       });
     }
 
-    function deleteItem(index) {
+    function removeOrderItem(index) {
       order.items.splice(index, 1);
       updateOrderList();
     }
 
-    window.onload = loadDrinks;
+    loadDrinks();
   </script>
 </body>
 </html>
