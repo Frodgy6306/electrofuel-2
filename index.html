@@ -20,10 +20,11 @@
       font-size: 2em;
       color: #00ffe7;
       text-shadow: 0 0 10px #00ffe7;
+      margin-top: 10px;
     }
 
     .container {
-      max-width: 600px;
+      max-width: 700px;
       margin: auto;
       background: #222e44;
       padding: 20px;
@@ -36,38 +37,42 @@
       margin-top: 15px;
       font-weight: bold;
       color: #aeeeff;
-      margin-bottom: 5px;
     }
 
     input[type="text"] {
       width: 100%;
-      padding: 12px;
+      padding: 10px;
       margin-top: 5px;
-      margin-bottom: 20px;
       border: none;
       border-radius: 8px;
       background: #1c253e;
       color: #fff;
       font-size: 1em;
       box-shadow: 0 0 5px #00ffe7;
-      text-align: center;
     }
 
     .drinks-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: 15px;
       margin-top: 15px;
     }
 
     .drink-btn {
       background-color: #1c253e;
       border: 2px solid #00ffe7;
-      border-radius: 12px;
+      border-radius: 50%;
       padding: 10px;
+      height: 100px;
+      width: 100px;
       cursor: pointer;
       text-align: center;
+      margin: auto;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
     }
 
     .drink-btn:hover {
@@ -81,21 +86,23 @@
     }
 
     .drink-btn img {
-      width: 100%;
-      height: 80px;
+      width: 60px;
+      height: 60px;
       object-fit: cover;
-      border-radius: 8px;
+      border-radius: 50%;
     }
 
     .drink-name {
-      margin-top: 5px;
+      margin-top: 10px;
       color: #e0f7ff;
       font-weight: bold;
+      font-size: 0.9em;
+      text-align: center;
     }
 
     button.action-btn {
       width: 100%;
-      margin-top: 20px;
+      margin-top: 15px;
       padding: 12px;
       font-size: 1.1em;
       border: none;
@@ -139,15 +146,6 @@
       transform: translateY(0);
     }
 
-    li.order-item strong {
-      color: #000;
-    }
-
-    li.order-item em {
-      font-style: italic;
-      color: #555;
-    }
-
     .delete-btn {
       margin-left: 10px;
       font-size: 0.7em;
@@ -166,6 +164,26 @@
 
     .delete-btn:hover {
       background-color: #ff1e1e;
+    }
+
+    @media (max-width: 600px) {
+      .drinks-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .drink-btn {
+        height: 90px;
+        width: 90px;
+      }
+
+      .drink-btn img {
+        width: 50px;
+        height: 50px;
+      }
+
+      .drink-name {
+        font-size: 0.8em;
+      }
     }
   </style>
 </head>
@@ -197,12 +215,12 @@
 
   <script>
     const drinks = [
-      { name: "Dango", img: "https://i.imgur.com/XxI9mU8.jpg" },
-      { name: "NPC", img: "https://i.imgur.com/VgLk0Dw.jpg" },
-      { name: "Sigma", img: "https://i.imgur.com/vg2f7RU.jpg" },
-      { name: "Alpha", img: "https://i.imgur.com/GUZrx1d.jpg" },
-      { name: "Jagung Susu", img: "https://i.imgur.com/gE8qMgN.jpg" },
-      { name: "StickyMilk Matcha", img: "https://i.imgur.com/0kpY6zE.jpg" }
+      { name: "Dango", img: "placeholder.png" },
+      { name: "NPC", img: "placeholder.png" },
+      { name: "Sigma", img: "placeholder.png" },
+      { name: "Alpha", img: "placeholder.png" },
+      { name: "Jagung Susu", img: "placeholder.png" },
+      { name: "StickyMilk Matcha", img: "placeholder.png" }
     ];
 
     const order = {
@@ -256,7 +274,7 @@
       document.querySelectorAll('.drink-btn').forEach(btn => btn.classList.remove('selected'));
     }
 
-    function submitOrder() {
+    async function submitOrder() {
       const customer = document.getElementById("customerName").value.trim();
       if (!customer) {
         alert("Please enter customer name.");
@@ -270,25 +288,29 @@
 
       order.customer = customer;
 
-      fetch("https://fascinated-volcano-thief.glitch.me/order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(order)
-      })
-      .then(res => res.json())  // Corrected to handle the response as JSON
-      .then(msg => {
-        console.log(msg);  // Log the response message for debugging
-        alert("✅ Order submitted for " + order.customer + "!");
-        order.items = [];  // Clear the order list
-        updateOrderList();  // Update the order UI
-        document.getElementById("customerName").value = "";  // Clear the name input field
-      })
-      .catch(err => {
-        console.error(err);
-        alert("⚠️ Failed to submit order. Please try again.");
-      });
+      try {
+        const response = await fetch("https://fascinated-volcano-thief.glitch.me/order", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(order)
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        alert(`✅ Order submitted for ${order.customer}!`);
+        order.items = [];
+        updateOrderList();
+        document.getElementById("customerName").value = "";
+      } catch (error) {
+        console.error("Error submitting order:", error);
+        alert(`⚠️ Failed to submit order: ${error.message}`);
+      }
     }
 
     function updateOrderList() {
