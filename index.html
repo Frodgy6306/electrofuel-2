@@ -274,15 +274,13 @@
         },
         body: JSON.stringify(order)
       })
-      .then(res => {
-        if (!res.ok) throw new Error("Network error");
-        return res.text();
-      })
+      .then(res => res.json())  // Corrected to handle the response as JSON
       .then(msg => {
+        console.log(msg);  // Log the response message for debugging
         alert("✅ Order submitted for " + order.customer + "!");
-        order.items = [];
-        updateOrderList();
-        document.getElementById("customerName").value = "";
+        order.items = [];  // Clear the order list
+        updateOrderList();  // Update the order UI
+        document.getElementById("customerName").value = "";  // Clear the name input field
       })
       .catch(err => {
         console.error(err);
@@ -296,30 +294,25 @@
 
       order.items.forEach((item, index) => {
         const li = document.createElement("li");
-        li.classList.add("order-item");
-
-        const itemText = document.createElement("span");
-        itemText.innerHTML = `🍹 <strong>${item.drink}</strong>${item.note ? ` – <em>${item.note}</em>` : ""}`;
-        li.appendChild(itemText);
-
-        const deleteButton = document.createElement("button");
-        deleteButton.textContent = "✖";
-        deleteButton.classList.add("delete-btn");
-        deleteButton.onclick = () => deleteItem(index);
-        li.appendChild(deleteButton);
-
+        li.className = "order-item";
+        li.innerHTML = `
+          <div><strong>${item.drink}</strong> <em>(${item.note})</em></div>
+          <button class="delete-btn" onclick="removeOrderItem(${index})">❌</button>
+        `;
         ul.appendChild(li);
-        setTimeout(() => li.classList.add("fade-in"), 10);
+
+        setTimeout(() => {
+          li.classList.add('fade-in');
+        }, 100);
       });
     }
 
-    function deleteItem(index) {
+    function removeOrderItem(index) {
       order.items.splice(index, 1);
       updateOrderList();
     }
 
-    window.onload = loadDrinks;
+    loadDrinks();
   </script>
-
 </body>
 </html>
