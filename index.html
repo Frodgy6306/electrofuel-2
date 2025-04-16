@@ -3,223 +3,201 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Electrofuel Order</title>
+  <title>Electrofuel Orders ⚡</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Montserrat:wght@500&display=swap" rel="stylesheet">
   <style>
-    /* Reset global styling */
-    * {
+    body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #1a1a2e;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
       color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      flex-direction: column;
-      padding: 20px;
+      font-family: 'Montserrat', sans-serif;
     }
 
-    h1 {
-      font-size: 3rem;
-      color: #00c8ff;
-      font-weight: bold;
-      text-shadow: 0 0 10px #00c8ff, 0 0 20px #ff00c8;
-      margin-bottom: 30px;
+    header {
+      text-align: center;
+      padding: 40px 20px 20px;
+      background: url('https://images.unsplash.com/photo-1604079625126-0f8b6d5429cd?auto=format&fit=crop&w=1500&q=80') no-repeat center;
+      background-size: cover;
+      color: #00ffe7;
+      text-shadow: 0 0 15px #00ffe7aa;
     }
 
-    .order-container {
-      background: #111;
-      border-radius: 12px;
-      padding: 40px 25px;
-      width: 100%;
-      max-width: 600px;
-      box-shadow: 0px 6px 25px rgba(0, 200, 255, 0.3);
+    header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3em;
+      margin-bottom: 10px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      background-color: #111b2b;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 0 25px #00ffe755;
     }
 
     label {
-      font-size: 1.1rem;
-      color: #bbb;
-      margin-top: 20px;
       display: block;
-      font-weight: 600;
+      margin-top: 20px;
+      color: #aeeeff;
+      font-weight: bold;
     }
 
     input[type="text"] {
       width: 100%;
       padding: 12px;
-      margin-top: 10px;
-      background: #222;
-      border: 2px solid #444;
+      margin-top: 8px;
       border-radius: 10px;
-      font-size: 1rem;
+      border: none;
+      font-size: 1em;
+      background: #1f2c3d;
       color: #fff;
-      outline: none;
-      box-shadow: 0 4px 8px rgba(0, 200, 255, 0.2);
     }
 
-    input[type="text"]:focus {
-      border-color: #00c8ff;
-    }
-
-    .menu-container {
+    .drinks-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 15px;
-      margin-top: 25px;
+      margin-top: 20px;
     }
 
     .drink-btn {
-      background: #222;
-      border-radius: 12px;
+      background-color: #1f2c3d;
+      border: 2px solid #00ffe7;
+      border-radius: 15px;
       overflow: hidden;
-      box-shadow: 0 2px 12px rgba(0, 200, 255, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       cursor: pointer;
-      transition: transform 0.3s, box-shadow 0.3s;
-      position: relative;
-      overflow: hidden;
+    }
+
+    .drink-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 12px #00ffe7;
+    }
+
+    .drink-btn.selected {
+      background-color: #223344;
+      box-shadow: 0 0 20px #00ffe7aa;
     }
 
     .drink-btn img {
       width: 100%;
-      height: auto;
+      height: 120px;
       object-fit: cover;
-      transition: transform 0.3s;
-    }
-
-    .drink-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 20px rgba(0, 200, 255, 0.5);
-    }
-
-    .drink-btn:hover img {
-      transform: scale(1.2);
     }
 
     .drink-name {
-      position: absolute;
-      bottom: 10px;
-      left: 0;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      color: #fff;
-      padding: 5px;
+      padding: 10px;
       text-align: center;
-      font-weight: 600;
+      font-weight: bold;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1em;
+      color: #e0f7ff;
     }
 
-    .order-btn {
-      background: #00c8ff;
-      color: #111;
-      font-size: 1.2rem;
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
+    .action-btn {
+      margin-top: 25px;
       width: 100%;
-      margin-top: 30px;
+      padding: 15px;
+      background: linear-gradient(135deg, #00ffe7, #007bff);
+      border: none;
+      border-radius: 12px;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #000;
       cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
+      transition: all 0.2s ease;
     }
 
-    .order-btn:hover {
-      background: #00a3cc;
-      transform: translateY(-3px);
+    .action-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 20px #00ffe7aa;
     }
 
-    .order-list {
+    ul {
+      list-style: none;
+      padding: 0;
       margin-top: 30px;
-      max-height: 250px;
-      overflow-y: auto;
     }
 
-    .order-item {
-      background: #222;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      padding: 12px;
+    li.order-item {
+      background: #f5f5f5;
+      color: #222;
+      padding: 12px 18px;
+      margin-bottom: 12px;
+      border-radius: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 8px rgba(0, 200, 255, 0.2);
+      animation: fadeIn 0.3s ease forwards;
     }
 
-    .order-item span {
-      font-weight: 600;
-      color: #00c8ff;
-    }
-
-    .order-item em {
-      color: #bbb;
-      font-style: italic;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .delete-btn {
-      background: #ff5050;
-      color: white;
-      font-size: 0.9rem;
+      background-color: #ff4444;
+      color: #fff;
       border: none;
-      padding: 5px 8px;
-      border-radius: 6px;
+      border-radius: 8px;
+      width: 25px;
+      height: 25px;
+      font-size: 0.9em;
       cursor: pointer;
-      transition: background 0.3s;
     }
 
     .delete-btn:hover {
-      background: #ff3333;
-    }
-
-    .footer {
-      position: fixed;
-      bottom: 20px;
-      font-size: 0.9rem;
-      color: #bbb;
+      background-color: #e60000;
     }
   </style>
 </head>
 <body>
-  <h1>⚡ Electrofuel Order ⚡</h1>
 
-  <div class="order-container">
-    <label for="customerName">Customer Name:</label>
-    <input type="text" id="customerName" placeholder="Enter name...">
+  <header>
+    <h1>⚡ Electrofuel Orders ⚡</h1>
+    <p>Powered by flavor & current</p>
+  </header>
+
+  <div class="container">
+    <label>Customer Name:</label>
+    <input type="text" id="customerName" placeholder="Enter your name...">
 
     <label>Select Drink:</label>
-    <div class="menu-container" id="drinkButtons">
-      <!-- Dynamically populated drink buttons -->
-    </div>
+    <div class="drinks-grid" id="drinkButtons"></div>
 
-    <label for="drinkNote">Notes (optional):</label>
-    <input type="text" id="drinkNote" placeholder="e.g. less sugar, no ice...">
+    <label>Notes (optional):</label>
+    <input type="text" id="drinkNote" placeholder="e.g. less ice, extra syrup...">
 
-    <button class="order-btn" onclick="addToOrder()">➕ Add to Order</button>
+    <button class="action-btn" onclick="addToOrder()">➕ Add to Order</button>
 
-    <div class="order-list" id="orderList">
-      <!-- Order list dynamically generated -->
-    </div>
+    <h3 style="margin-top: 30px;">🧾 Current Order:</h3>
+    <ul id="orderList"></ul>
 
-    <button class="order-btn" onclick="submitOrder()">✅ Submit Order</button>
+    <button class="action-btn" onclick="submitOrder()">✅ Submit Order</button>
   </div>
 
-  <div class="footer">
-    Made with ⚡ for Electrofuel
-  </div>
+  <audio id="clickSound" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio>
 
   <script>
     const drinks = [
-      { name: "Dango", img: "images/dango.png" },
-      { name: "NPC", img: "images/npc.png" },
-      { name: "Sigma", img: "images/sigma.png" },
-      { name: "Alpha", img: "images/alpha.png" },
-      { name: "Jagung Susu", img: "images/jagung_susu.png" },
-      { name: "StickyMilk Matcha", img: "images/stickymilk_matcha.png" }
+      { name: "Dango", img: "https://cdn-icons-png.flaticon.com/512/3014/3014731.png" },
+      { name: "NPC", img: "https://cdn-icons-png.flaticon.com/512/4359/4359994.png" },
+      { name: "Sigma", img: "https://cdn-icons-png.flaticon.com/512/1046/1046769.png" },
+      { name: "Alpha", img: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png" },
+      { name: "Jagung Susu", img: "https://cdn-icons-png.flaticon.com/512/1046/1046747.png" },
+      { name: "StickyMilk Matcha", img: "https://cdn-icons-png.flaticon.com/512/3081/3081559.png" }
     ];
 
+    const order = {
+      customer: "",
+      items: []
+    };
+
     let selectedDrink = null;
-    const order = { customer: "", items: [] };
 
     function loadDrinks() {
       const container = document.getElementById("drinkButtons");
@@ -227,11 +205,11 @@
         const btn = document.createElement("div");
         btn.className = "drink-btn";
         btn.dataset.index = index;
+        btn.onclick = () => selectDrink(index);
         btn.innerHTML = `
           <img src="${drink.img}" alt="${drink.name}">
           <div class="drink-name">${drink.name}</div>
         `;
-        btn.onclick = () => selectDrink(index);
         container.appendChild(btn);
       });
     }
@@ -244,26 +222,57 @@
 
     function addToOrder() {
       if (selectedDrink === null) {
-        alert("Please select a drink.");
+        alert("Select a drink first!");
         return;
       }
       const note = document.getElementById("drinkNote").value.trim();
       const drink = drinks[selectedDrink].name;
       order.items.push({ drink, note });
       updateOrderList();
+
+      document.getElementById("clickSound").play();
       selectedDrink = null;
       document.getElementById("drinkNote").value = "";
+      document.querySelectorAll('.drink-btn').forEach(btn => btn.classList.remove('selected'));
+    }
+
+    function submitOrder() {
+      const customer = document.getElementById("customerName").value.trim();
+      if (!customer) {
+        alert("Enter customer name.");
+        return;
+      }
+
+      if (order.items.length === 0) {
+        alert("Add at least one drink.");
+        return;
+      }
+
+      order.customer = customer;
+
+      fetch('https://fascinated-volcano-thief.glitch.me/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(order)
+      })
+      .then(res => res.json())
+      .then(data => alert(data.message))
+      .catch(() => alert("Error submitting order."));
+
+      order.items = [];
+      updateOrderList();
+      document.getElementById("customerName").value = "";
     }
 
     function updateOrderList() {
       const ul = document.getElementById("orderList");
       ul.innerHTML = "";
+
       order.items.forEach((item, index) => {
-        const li = document.createElement("div");
+        const li = document.createElement("li");
         li.className = "order-item";
         li.innerHTML = `
-          <span>${item.drink}</span>
-          ${item.note ? `<em>(${item.note})</em>` : ""}
+          <span>🍹 <strong>${item.drink}</strong> ${item.note ? `<em>– ${item.note}</em>` : ""}</span>
           <button class="delete-btn" onclick="deleteItem(${index})">✖</button>
         `;
         ul.appendChild(li);
@@ -275,19 +284,8 @@
       updateOrderList();
     }
 
-    function submitOrder() {
-      const customer = document.getElementById("customerName").value.trim();
-      if (!customer || order.items.length === 0) {
-        alert("Please fill out all details and add at least one item.");
-        return;
-      }
-      order.customer = customer;
-      alert("Order submitted!");
-      order.items = [];
-      updateOrderList();
-    }
-
     loadDrinks();
   </script>
+
 </body>
 </html>
