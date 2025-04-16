@@ -12,7 +12,7 @@
       font-family: 'Poppins', sans-serif;
       margin: 0;
       padding: 0;
-      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      background: linear-gradient(135deg, #00bfff, #8a2be2); /* Gradient background */
       height: 100vh;
       display: flex;
       justify-content: center;
@@ -23,7 +23,8 @@
       text-align: center;
       font-size: 2.5em;
       color: #ffffff;
-      text-shadow: 0 0 8px #ff7eb3;
+      text-shadow: 0 0 8px #8a2be2;
+      margin-top: 0; /* Keep title in its current position */
     }
 
     .container {
@@ -41,7 +42,7 @@
       display: block;
       margin-top: 10px;
       font-weight: 600;
-      color: #ff7eb3;
+      color: #8a2be2;
       font-size: 1.1em;
     }
 
@@ -54,60 +55,65 @@
       background: rgba(255, 255, 255, 0.2);
       color: #fff;
       font-size: 1em;
-      box-shadow: 0 0 8px #ff7eb3;
+      box-shadow: 0 0 8px #8a2be2;
       margin-bottom: 15px;
     }
 
     .drinks-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 20px;
+      gap: 15px;
+      margin-top: 15px;
     }
 
     .drink-btn {
-      background-color: rgba(255, 255, 255, 0.2);
-      border: 2px solid #ff7eb3;
-      border-radius: 12px;
+      background-color: #8a2be2;
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       padding: 10px;
       cursor: pointer;
-      text-align: center;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      text-align: center;
+      box-shadow: 0 0 10px #8a2be2;
     }
 
     .drink-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 12px #ff7eb3;
+      transform: scale(1.1);
+      box-shadow: 0 0 15px #8a2be2;
     }
 
     .drink-btn.selected {
-      box-shadow: 0 0 20px #ff7eb3;
-      background: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 20px #8a2be2;
+      background: #7a1bbd;
     }
 
     .drink-btn img {
-      width: 100%;
-      height: 80px;
+      width: 80%;
+      height: 80%;
+      border-radius: 50%;
       object-fit: cover;
-      border-radius: 8px;
     }
 
     .drink-name {
-      margin-top: 5px;
-      color: #ff7eb3;
+      margin-top: 10px;
+      color: #fff;
       font-weight: 600;
       font-size: 1.1em;
     }
 
     button.action-btn {
       width: 100%;
-      margin-top: 15px;
+      margin-top: 20px;
       padding: 12px;
       font-size: 1.1em;
       border: none;
       border-radius: 10px;
-      background: linear-gradient(145deg, #ff7eb3, #ff758c);
-      color: #fff;
+      background: linear-gradient(145deg, #00ffe7, #007bff);
+      color: #000;
       font-weight: bold;
       cursor: pointer;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -115,7 +121,7 @@
 
     button.action-btn:hover {
       transform: scale(1.03);
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 20px #00ffe7aa;
     }
 
     ul {
@@ -125,15 +131,15 @@
     }
 
     li.order-item {
-      background: rgba(255, 255, 255, 0.3);
+      background: #fff7e6;
       margin-bottom: 12px;
       padding: 10px 14px;
       border-radius: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      color: #fff;
-      font-weight: 600;
+      color: #2e2e2e;
+      font-weight: 500;
       font-size: 1em;
       opacity: 0;
       transform: translateY(10px);
@@ -146,22 +152,22 @@
     }
 
     li.order-item strong {
-      color: #ff758c;
+      color: #000;
     }
 
     li.order-item em {
       font-style: italic;
-      color: #ff7eb3;
+      color: #555;
     }
 
     .delete-btn {
       margin-left: 10px;
-      font-size: 0.8em;
-      width: 24px;
-      height: 24px;
+      font-size: 0.7em;
+      width: 20px;
+      height: 20px;
       padding: 0;
-      border-radius: 50%;
-      line-height: 22px;
+      border-radius: 5px;
+      line-height: 18px;
       text-align: center;
       background-color: #ff5555;
       color: white;
@@ -203,12 +209,12 @@
 
   <script>
     const drinks = [
-      { name: "Dango", img: "https://i.imgur.com/XxI9mU8.jpg" },
-      { name: "NPC", img: "https://i.imgur.com/VgLk0Dw.jpg" },
-      { name: "Sigma", img: "https://i.imgur.com/vg2f7RU.jpg" },
-      { name: "Alpha", img: "https://i.imgur.com/GUZrx1d.jpg" },
-      { name: "Jagung Susu", img: "https://i.imgur.com/gE8qMgN.jpg" },
-      { name: "StickyMilk Matcha", img: "https://i.imgur.com/0kpY6zE.jpg" }
+      { name: "Dango", img: "https://via.placeholder.com/100x100/8a2be2/fff?text=Dango" },
+      { name: "NPC", img: "https://via.placeholder.com/100x100/8a2be2/fff?text=NPC" },
+      { name: "Sigma", img: "https://via.placeholder.com/100x100/8a2be2/fff?text=Sigma" },
+      { name: "Alpha", img: "https://via.placeholder.com/100x100/8a2be2/fff?text=Alpha" },
+      { name: "Jagung Susu", img: "https://via.placeholder.com/100x100/8a2be2/fff?text=Jagung+Susu" },
+      { name: "StickyMilk Matcha", img: "https://via.placeholder.com/100x100/8a2be2/fff?text=StickyMilk+Matcha" }
     ];
 
     const order = {
