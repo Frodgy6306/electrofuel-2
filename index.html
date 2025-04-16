@@ -23,7 +23,7 @@
     }
 
     .container {
-      max-width: 700px;
+      max-width: 600px;
       margin: auto;
       background: #222e44;
       padding: 20px;
@@ -36,18 +36,21 @@
       margin-top: 15px;
       font-weight: bold;
       color: #aeeeff;
+      margin-bottom: 5px;
     }
 
     input[type="text"] {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin-top: 5px;
+      margin-bottom: 20px;
       border: none;
       border-radius: 8px;
       background: #1c253e;
       color: #fff;
       font-size: 1em;
       box-shadow: 0 0 5px #00ffe7;
+      text-align: center;
     }
 
     .drinks-grid {
@@ -92,7 +95,7 @@
 
     button.action-btn {
       width: 100%;
-      margin-top: 15px;
+      margin-top: 20px;
       padding: 12px;
       font-size: 1.1em;
       border: none;
@@ -194,12 +197,12 @@
 
   <script>
     const drinks = [
-      { name: "Dango", img: "https://via.placeholder.com/150" },
-      { name: "NPC", img: "https://via.placeholder.com/150" },
-      { name: "Sigma", img: "https://via.placeholder.com/150" },
-      { name: "Alpha", img: "https://via.placeholder.com/150" },
-      { name: "Jagung Susu", img: "https://via.placeholder.com/150" },
-      { name: "StickyMilk Matcha", img: "https://via.placeholder.com/150" }
+      { name: "Dango", img: "https://i.imgur.com/XxI9mU8.jpg" },
+      { name: "NPC", img: "https://i.imgur.com/VgLk0Dw.jpg" },
+      { name: "Sigma", img: "https://i.imgur.com/vg2f7RU.jpg" },
+      { name: "Alpha", img: "https://i.imgur.com/GUZrx1d.jpg" },
+      { name: "Jagung Susu", img: "https://i.imgur.com/gE8qMgN.jpg" },
+      { name: "StickyMilk Matcha", img: "https://i.imgur.com/0kpY6zE.jpg" }
     ];
 
     const order = {
@@ -274,23 +277,16 @@
         },
         body: JSON.stringify(order)
       })
-      .then(res => res.json())  // Ensure the response is in JSON format
+      .then(res => res.json())  // Corrected to handle the response as JSON
       .then(msg => {
-        // Check if the response contains a success message
-        if (msg && msg.success) {
-          console.log(msg);  // Log the response message for debugging
-          alert("✅ Order submitted for " + order.customer + "!");
-          order.items = [];  // Clear the order list
-          updateOrderList();  // Update the order UI
-          document.getElementById("customerName").value = "";  // Clear the name input field
-        } else {
-          // If response does not indicate success, handle it gracefully
-          console.error("Failed to submit order:", msg);
-          alert("⚠️ Failed to submit order. Please try again.");
-        }
+        console.log(msg);  // Log the response message for debugging
+        alert("✅ Order submitted for " + order.customer + "!");
+        order.items = [];  // Clear the order list
+        updateOrderList();  // Update the order UI
+        document.getElementById("customerName").value = "";  // Clear the name input field
       })
       .catch(err => {
-        console.error("Error:", err);
+        console.error(err);
         alert("⚠️ Failed to submit order. Please try again.");
       });
     }
