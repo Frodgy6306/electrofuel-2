@@ -16,7 +16,9 @@
       height: 100vh;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start; /* Align content to the top */
+      flex-direction: column;
+      padding-top: 20px; /* Space from the top for the title */
     }
 
     h2 {
@@ -24,7 +26,7 @@
       font-size: 2.5em;
       color: #ffffff;
       text-shadow: 0 0 8px #8a2be2;
-      margin-top: 0; /* Keep title in its current position */
+      margin-top: 0; /* Keep title at the very top */
     }
 
     .container {
