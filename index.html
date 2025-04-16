@@ -1,343 +1,126 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Electrofuel Order</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+<script>
+  const drinks = [
+    { name: "Dango", img: "placeholder.png" },
+    { name: "NPC", img: "placeholder.png" },
+    { name: "Sigma", img: "placeholder.png" },
+    { name: "Alpha", img: "placeholder.png" },
+    { name: "Jagung Susu", img: "placeholder.png" },
+    { name: "StickyMilk Matcha", img: "placeholder.png" }
+  ];
 
-    body {
-      color: #e0f7ff;
-      font-family: 'Orbitron', sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #1b2a3d;
+  const order = {
+    customer: "",
+    items: []
+  };
+
+  let selectedDrink = null;
+
+  function loadDrinks() {
+    const container = document.getElementById("drinkButtons");
+    drinks.forEach((drink, index) => {
+      const btn = document.createElement("div");
+      btn.className = "drink-btn";
+      btn.dataset.index = index;
+
+      btn.onclick = () => selectDrink(index);
+
+      btn.innerHTML = `
+        <img src="${drink.img}" alt="${drink.name}">
+        <div class="drink-name">${drink.name}</div>
+      `;
+      container.appendChild(btn);
+    });
+  }
+
+  function selectDrink(index) {
+    selectedDrink = index;
+    document.querySelectorAll('.drink-btn').forEach(btn => {
+      btn.classList.remove('selected');
+    });
+    document.querySelector(`.drink-btn[data-index="${index}"]`).classList.add('selected');
+  }
+
+  function addToOrder() {
+    if (selectedDrink === null) {
+      alert("Please select a drink.");
+      return;
     }
 
-    h2 {
-      text-align: center;
-      font-size: 2em;
-      color: #00ffe7;
-      text-shadow: 0 0 10px #00ffe7;
-      margin-top: 10px;
+    const note = document.getElementById("drinkNote").value.trim();
+    const drink = drinks[selectedDrink].name;
+
+    order.items.push({ drink, note });
+    updateOrderList();
+
+    document.getElementById("clickSound").play();
+
+    selectedDrink = null;
+    document.getElementById("drinkNote").value = "";
+    document.querySelectorAll('.drink-btn').forEach(btn => btn.classList.remove('selected'));
+  }
+
+  // ✅ Replaced submitOrder() with your fixed version:
+  function submitOrder() {
+    const customer = document.getElementById("customerName").value.trim();
+    if (!customer) {
+      alert("Please enter customer name.");
+      return;
     }
 
-    .container {
-      max-width: 700px;
-      margin: auto;
-      background: #222e44;
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 0 20px #00ffe766;
+    if (order.items.length === 0) {
+      alert("Add at least one item before submitting.");
+      return;
     }
 
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-      color: #aeeeff;
-    }
+    order.customer = customer;
 
-    input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: none;
-      border-radius: 8px;
-      background: #1c253e;
-      color: #fff;
-      font-size: 1em;
-      box-shadow: 0 0 5px #00ffe7;
-    }
-
-    .drinks-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      margin-top: 15px;
-    }
-
-    .drink-btn {
-      background-color: #1c253e;
-      border: 2px solid #00ffe7;
-      border-radius: 50%;
-      padding: 10px;
-      height: 100px;
-      width: 100px;
-      cursor: pointer;
-      text-align: center;
-      margin: auto;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
-
-    .drink-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 10px #00ffe7;
-    }
-
-    .drink-btn.selected {
-      box-shadow: 0 0 20px #00ffe7;
-      background: #1f2c4d;
-    }
-
-    .drink-btn img {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 50%;
-    }
-
-    .drink-name {
-      margin-top: 10px;
-      color: #e0f7ff;
-      font-weight: bold;
-      font-size: 0.9em;
-      text-align: center;
-    }
-
-    button.action-btn {
-      width: 100%;
-      margin-top: 15px;
-      padding: 12px;
-      font-size: 1.1em;
-      border: none;
-      border-radius: 10px;
-      background: linear-gradient(145deg, #00ffe7, #007bff);
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    button.action-btn:hover {
-      transform: scale(1.03);
-      box-shadow: 0 0 20px #00ffe7aa;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-      margin-top: 20px;
-    }
-
-    li.order-item {
-      background: #fff7e6;
-      margin-bottom: 12px;
-      padding: 10px 14px;
-      border-radius: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #2e2e2e;
-      font-weight: 500;
-      font-size: 1em;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: all 0.3s ease;
-    }
-
-    li.order-item.fade-in {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .delete-btn {
-      margin-left: 10px;
-      font-size: 0.7em;
-      width: 20px;
-      height: 20px;
-      padding: 0;
-      border-radius: 5px;
-      line-height: 18px;
-      text-align: center;
-      background-color: #ff5555;
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-
-    .delete-btn:hover {
-      background-color: #ff1e1e;
-    }
-
-    @media (max-width: 600px) {
-      .drinks-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .drink-btn {
-        height: 90px;
-        width: 90px;
-      }
-
-      .drink-btn img {
-        width: 50px;
-        height: 50px;
-      }
-
-      .drink-name {
-        font-size: 0.8em;
-      }
-    }
-  </style>
-</head>
-<body>
-
-  <h2>⚡ Electrofuel Order System ⚡</h2>
-
-  <div class="container">
-    <label>Customer Name:</label>
-    <input type="text" id="customerName" placeholder="Enter name...">
-
-    <label>Select Drink:</label>
-    <div class="drinks-grid" id="drinkButtons">
-      <!-- Populated by JS -->
-    </div>
-
-    <label>Notes (optional):</label>
-    <input type="text" id="drinkNote" placeholder="e.g. less sugar, no ice...">
-
-    <button class="action-btn" onclick="addToOrder()">➕ Add to Order</button>
-
-    <h3 style="margin-top: 30px;">🧾 Order Items:</h3>
-    <ul id="orderList"></ul>
-
-    <button class="action-btn" onclick="submitOrder()">✅ Submit Order</button>
-  </div>
-
-  <audio id="clickSound" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio>
-
-  <script>
-    const drinks = [
-      { name: "Dango", img: "placeholder.png" },
-      { name: "NPC", img: "placeholder.png" },
-      { name: "Sigma", img: "placeholder.png" },
-      { name: "Alpha", img: "placeholder.png" },
-      { name: "Jagung Susu", img: "placeholder.png" },
-      { name: "StickyMilk Matcha", img: "placeholder.png" }
-    ];
-
-    const order = {
-      customer: "",
-      items: []
-    };
-
-    let selectedDrink = null;
-
-    function loadDrinks() {
-      const container = document.getElementById("drinkButtons");
-      drinks.forEach((drink, index) => {
-        const btn = document.createElement("div");
-        btn.className = "drink-btn";
-        btn.dataset.index = index;
-
-        btn.onclick = () => selectDrink(index);
-
-        btn.innerHTML = `
-          <img src="${drink.img}" alt="${drink.name}">
-          <div class="drink-name">${drink.name}</div>
-        `;
-        container.appendChild(btn);
-      });
-    }
-
-    function selectDrink(index) {
-      selectedDrink = index;
-      document.querySelectorAll('.drink-btn').forEach(btn => {
-        btn.classList.remove('selected');
-      });
-      document.querySelector(`.drink-btn[data-index="${index}"]`).classList.add('selected');
-    }
-
-    function addToOrder() {
-      if (selectedDrink === null) {
-        alert("Please select a drink.");
-        return;
-      }
-
-      const note = document.getElementById("drinkNote").value.trim();
-      const drink = drinks[selectedDrink].name;
-
-      order.items.push({ drink, note });
+    fetch("https://fascinated-volcano-thief.glitch.me/order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(order)
+    })
+    .then(res => {
+      if (!res.ok) throw new Error("Server responded with an error.");
+      return res.json();
+    })
+    .then(data => {
+      console.log(data);
+      alert("✅ Order submitted for " + order.customer + "!");
+      order.items = [];
       updateOrderList();
+      document.getElementById("customerName").value = "";
+    })
+    .catch(err => {
+      console.error(err);
+      alert("⚠️ Failed to submit order. Please try again.");
+    });
+  }
 
-      document.getElementById("clickSound").play();
+  function updateOrderList() {
+    const ul = document.getElementById("orderList");
+    ul.innerHTML = "";
 
-      selectedDrink = null;
-      document.getElementById("drinkNote").value = "";
-      document.querySelectorAll('.drink-btn').forEach(btn => btn.classList.remove('selected'));
-    }
+    order.items.forEach((item, index) => {
+      const li = document.createElement("li");
+      li.className = "order-item";
+      li.innerHTML = `
+        <div><strong>${item.drink}</strong> <em>(${item.note})</em></div>
+        <button class="delete-btn" onclick="removeOrderItem(${index})">❌</button>
+      `;
+      ul.appendChild(li);
 
-    async function submitOrder() {
-      const customer = document.getElementById("customerName").value.trim();
-      if (!customer) {
-        alert("Please enter customer name.");
-        return;
-      }
+      setTimeout(() => {
+        li.classList.add('fade-in');
+      }, 100);
+    });
+  }
 
-      if (order.items.length === 0) {
-        alert("Add at least one item before submitting.");
-        return;
-      }
+  function removeOrderItem(index) {
+    order.items.splice(index, 1);
+    updateOrderList();
+  }
 
-      order.customer = customer;
-
-      try {
-        const response = await fetch("https://fascinated-volcano-thief.glitch.me/order", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(order)
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
-        }
-
-        const result = await response.json();
-        alert(`✅ Order submitted for ${order.customer}!`);
-        order.items = [];
-        updateOrderList();
-        document.getElementById("customerName").value = "";
-      } catch (error) {
-        console.error("Error submitting order:", error);
-        alert(`⚠️ Failed to submit order: ${error.message}`);
-      }
-    }
-
-    function updateOrderList() {
-      const ul = document.getElementById("orderList");
-      ul.innerHTML = "";
-
-      order.items.forEach((item, index) => {
-        const li = document.createElement("li");
-        li.className = "order-item";
-        li.innerHTML = `
-          <div><strong>${item.drink}</strong> <em>(${item.note})</em></div>
-          <button class="delete-btn" onclick="removeOrderItem(${index})">❌</button>
-        `;
-        ul.appendChild(li);
-
-        setTimeout(() => {
-          li.classList.add('fade-in');
-        }, 100);
-      });
-    }
-
-    function removeOrderItem(index) {
-      order.items.splice(index, 1);
-      updateOrderList();
-    }
-
-    loadDrinks();
-  </script>
-</body>
-</html>
+  loadDrinks();
+</script>
