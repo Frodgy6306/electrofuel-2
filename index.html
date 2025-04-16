@@ -12,7 +12,7 @@
       font-family: 'Orbitron', sans-serif;
       margin: 0;
       padding: 20px;
-      background-color: #1b2a3d; /* Lighter complementary background */
+      background-color: #1b2a3d;
     }
 
     h2 {
@@ -25,7 +25,7 @@
     .container {
       max-width: 700px;
       margin: auto;
-      background: #222e44; /* Slightly lighter dark blue background */
+      background: #222e44;
       padding: 20px;
       border-radius: 20px;
       box-shadow: 0 0 20px #00ffe766;
@@ -175,9 +175,7 @@
     <input type="text" id="customerName" placeholder="Enter name...">
 
     <label>Select Drink:</label>
-    <div class="drinks-grid" id="drinkButtons">
-      <!-- Populated by JS -->
-    </div>
+    <div class="drinks-grid" id="drinkButtons"></div>
 
     <label>Notes (optional):</label>
     <input type="text" id="drinkNote" placeholder="e.g. less sugar, no ice...">
@@ -190,7 +188,6 @@
     <button class="action-btn" onclick="submitOrder()">✅ Submit Order</button>
   </div>
 
-  <!-- ✅ Click sound -->
   <audio id="clickSound" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio>
 
   <script>
@@ -219,24 +216,20 @@
 
         btn.onclick = () => selectDrink(index);
 
-        btn.innerHTML = 
+        btn.innerHTML = `
           <img src="${drink.img}" alt="${drink.name}">
           <div class="drink-name">${drink.name}</div>
-        ;
+        `;
         container.appendChild(btn);
       });
     }
 
     function selectDrink(index) {
       selectedDrink = index;
-
-      // Remove highlights
       document.querySelectorAll('.drink-btn').forEach(btn => {
         btn.classList.remove('selected');
       });
-
-      // Add highlight to selected
-      document.querySelector(.drink-btn[data-index="${index}"]).classList.add('selected');
+      document.querySelector(`.drink-btn[data-index="${index}"]`).classList.add('selected');
     }
 
     function addToOrder() {
@@ -251,12 +244,10 @@
       order.items.push({ drink, note });
       updateOrderList();
 
-      // Play click sound
       const clickSound = document.getElementById("clickSound");
       clickSound.currentTime = 0;
       clickSound.play();
 
-      // Reset for next item
       selectedDrink = null;
       document.getElementById("drinkNote").value = "";
       document.querySelectorAll('.drink-btn').forEach(btn => btn.classList.remove('selected'));
@@ -276,7 +267,6 @@
 
       order.customer = customer;
 
-      // Sending the order data to the backend
       fetch('https://fascinated-volcano-thief.glitch.me/order', {
         method: 'POST',
         headers: {
@@ -284,16 +274,15 @@
         },
         body: JSON.stringify(order)
       })
-      .then(response => response.json())  // Handle the response from the server
+      .then(response => response.json())
       .then(data => {
-        alert(data.message);  // Show a success message from the backend
+        alert(data.message);
       })
       .catch(error => {
         console.error('Error:', error);
         alert('There was an error submitting your order.');
       });
 
-      // Reset everything
       order.items = [];
       updateOrderList();
       document.getElementById("customerName").value = "";
@@ -308,7 +297,7 @@
         li.classList.add("order-item");
 
         const itemText = document.createElement("span");
-        itemText.innerHTML = 🍹 <strong>${item.drink}</strong>${item.note ?  – <em>${item.note}</em> : ""};
+        itemText.innerHTML = `🍹 <strong>${item.drink}</strong>${item.note ? ` – <em>${item.note}</em>` : ""}`;
         li.appendChild(itemText);
 
         const deleteButton = document.createElement("button");
@@ -327,7 +316,6 @@
       updateOrderList();
     }
 
-    // Load drinks when the page is ready
     loadDrinks();
   </script>
 </body>
