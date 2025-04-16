@@ -194,12 +194,12 @@
 
   <script>
     const drinks = [
-      { name: "Dango", img: "https://i.imgur.com/XxI9mU8.jpg" },
-      { name: "NPC", img: "https://i.imgur.com/VgLk0Dw.jpg" },
-      { name: "Sigma", img: "https://i.imgur.com/vg2f7RU.jpg" },
-      { name: "Alpha", img: "https://i.imgur.com/GUZrx1d.jpg" },
-      { name: "Jagung Susu", img: "https://i.imgur.com/gE8qMgN.jpg" },
-      { name: "StickyMilk Matcha", img: "https://i.imgur.com/0kpY6zE.jpg" }
+      { name: "Dango", img: "https://via.placeholder.com/150" },
+      { name: "NPC", img: "https://via.placeholder.com/150" },
+      { name: "Sigma", img: "https://via.placeholder.com/150" },
+      { name: "Alpha", img: "https://via.placeholder.com/150" },
+      { name: "Jagung Susu", img: "https://via.placeholder.com/150" },
+      { name: "StickyMilk Matcha", img: "https://via.placeholder.com/150" }
     ];
 
     const order = {
@@ -274,16 +274,23 @@
         },
         body: JSON.stringify(order)
       })
-      .then(res => res.json())  // Corrected to handle the response as JSON
+      .then(res => res.json())  // Ensure the response is in JSON format
       .then(msg => {
-        console.log(msg);  // Log the response message for debugging
-        alert("✅ Order submitted for " + order.customer + "!");
-        order.items = [];  // Clear the order list
-        updateOrderList();  // Update the order UI
-        document.getElementById("customerName").value = "";  // Clear the name input field
+        // Check if the response contains a success message
+        if (msg && msg.success) {
+          console.log(msg);  // Log the response message for debugging
+          alert("✅ Order submitted for " + order.customer + "!");
+          order.items = [];  // Clear the order list
+          updateOrderList();  // Update the order UI
+          document.getElementById("customerName").value = "";  // Clear the name input field
+        } else {
+          // If response does not indicate success, handle it gracefully
+          console.error("Failed to submit order:", msg);
+          alert("⚠️ Failed to submit order. Please try again.");
+        }
       })
       .catch(err => {
-        console.error(err);
+        console.error("Error:", err);
         alert("⚠️ Failed to submit order. Please try again.");
       });
     }
