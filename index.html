@@ -5,186 +5,208 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Electrofuel Order</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
 
-    body {
-      color: #e0f7ff;
-      font-family: 'Orbitron', sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #1b2a3d;
-    }
+body {
+  color: #e0f7ff;
+  font-family: 'Orbitron', sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #0a0f1b;
+}
 
-    h2 {
-      text-align: center;
-      font-size: 2em;
-      color: #00ffe7;
-      text-shadow: 0 0 10px #00ffe7;
-      margin-top: 10px;
-    }
+h2 {
+  text-align: center;
+  font-size: 2.2em;
+  color: #00ffe7;
+  text-shadow: 0 0 10px #00ffe7;
+  margin-top: 10px;
+}
 
-    .container {
-      max-width: 700px;
-      margin: auto;
-      background: #222e44;
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 0 20px #00ffe766;
-    }
+.container {
+  max-width: 1000px;
+  margin: auto;
+  background: #121c2b;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px #00ffe766;
+}
 
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-      color: #aeeeff;
-    }
+label {
+  display: block;
+  margin-top: 20px;
+  font-weight: bold;
+  color: #aeeeff;
+}
 
-    input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: none;
-      border-radius: 8px;
-      background: #1c253e;
-      color: #fff;
-      font-size: 1em;
-      box-shadow: 0 0 5px #00ffe7;
-    }
+input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 10px;
+  background: #1c253e;
+  color: #fff;
+  font-size: 1em;
+  box-shadow: 0 0 5px #00ffe7;
+}
 
-    .drinks-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      margin-top: 15px;
-    }
+/* 🔘 HORIZONTAL CAROUSEL CONTAINER */
+#drinkCarousel {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 30px;
+  overflow-x: auto;
+  padding: 30px;
+  background: #1a2235;
+  border-radius: 20px;
+  box-shadow: 0 0 25px #00ffe744;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
 
-    .drink-btn {
-      background-color: #1c253e;
-      border: 2px solid #00ffe7;
-      border-radius: 50%;
-      padding: 10px;
-      height: 100px;
-      width: 100px;
-      cursor: pointer;
-      text-align: center;
-      margin: auto;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* IE 10+ */
+}
 
-    .drink-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 10px #00ffe7;
-    }
+#drinkCarousel::-webkit-scrollbar {
+  display: none;                /* Chrome, Safari, Opera */
+}
 
-    .drink-btn.selected {
-      box-shadow: 0 0 20px #00ffe7;
-      background: #1f2c4d;
-    }
 
-    .drink-btn img {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 50%;
-    }
+/* 🍹 CIRCULAR DRINK BUTTONS */
+.drink-btn {
+  background-color: #1c253e;
+  border: 2px solid #00ffe7;
+  border-radius: 50%;
+  width: 140px;
+  height: 140px;
+  padding: 15px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  scroll-snap-align: center;
+  flex: 0 0 auto;
+}
 
-    .drink-name {
-      margin-top: 10px;
-      color: #e0f7ff;
-      font-weight: bold;
-      font-size: 0.9em;
-      text-align: center;
-    }
+.drink-btn img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%;
+}
 
-    button.action-btn {
-      width: 100%;
-      margin-top: 15px;
-      padding: 12px;
-      font-size: 1.1em;
-      border: none;
-      border-radius: 10px;
-      background: linear-gradient(145deg, #00ffe7, #007bff);
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
+.drink-name {
+  margin-top: 10px;
+  color: #e0f7ff;
+  font-weight: bold;
+  font-size: 0.9em;
+  text-align: center;
+}
 
-    button.action-btn:hover {
-      transform: scale(1.03);
-      box-shadow: 0 0 20px #00ffe7aa;
-    }
+.drink-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px #00ffe7;
+}
 
-    ul {
-      list-style: none;
-      padding: 0;
-      margin-top: 20px;
-    }
+.drink-btn.selected {
+  box-shadow: 0 0 20px #00ffe7, inset 0 0 10px #00ffe7;
+  background: #243456;
+}
 
-    li.order-item {
-      background: #fff7e6;
-      margin-bottom: 12px;
-      padding: 10px 14px;
-      border-radius: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #2e2e2e;
-      font-weight: 500;
-      font-size: 1em;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: all 0.3s ease;
-    }
+/* 🚀 ACTION BUTTON */
+button.action-btn {
+  width: 100%;
+  margin-top: 20px;
+  padding: 15px;
+  font-size: 1.1em;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #00ffe7, #007bff);
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
-    li.order-item.fade-in {
-      opacity: 1;
-      transform: translateY(0);
-    }
+button.action-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 20px #00ffe7aa;
+}
 
-    .delete-btn {
-      margin-left: 10px;
-      font-size: 0.7em;
-      width: 20px;
-      height: 20px;
-      padding: 0;
-      border-radius: 5px;
-      line-height: 18px;
-      text-align: center;
-      background-color: #ff5555;
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
+/* 🧾 ORDER LIST */
+ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
 
-    .delete-btn:hover {
-      background-color: #ff1e1e;
-    }
+li.order-item {
+  background: #fff7e6;
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #2e2e2e;
+  font-weight: 500;
+  font-size: 1em;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
 
-    @media (max-width: 600px) {
-      .drinks-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+li.order-item.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
 
-      .drink-btn {
-        height: 90px;
-        width: 90px;
-      }
+/* ❌ DELETE BUTTON */
+.delete-btn {
+  margin-left: 10px;
+  font-size: 0.7em;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border-radius: 5px;
+  line-height: 18px;
+  text-align: center;
+  background-color: #ff5555;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
 
-      .drink-btn img {
-        width: 50px;
-        height: 50px;
-      }
+.delete-btn:hover {
+  background-color: #ff1e1e;
+}
 
-      .drink-name {
-        font-size: 0.8em;
-      }
-    }
+/* 📱 RESPONSIVE */
+@media (max-width: 600px) {
+  .drink-btn {
+    width: 100px;
+    height: 100px;
+  }
+
+  .drink-btn img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .drink-name {
+    font-size: 0.75em;
+  }
+
+  #drinkCarousel {
+    gap: 15px;
+    padding: 20px;
+  }
+}
   </style>
 </head>
 <body>
@@ -196,8 +218,8 @@
     <input type="text" id="customerName" placeholder="Enter name...">
 
     <label>Select Drink:</label>
-    <div class="drinks-grid" id="drinkButtons">
-      <!-- Populated by JS -->
+    <div class="carousel-wrapper">
+      <div class="carousel-container" id="drinkCarousel"></div>
     </div>
 
     <label>Notes (optional):</label>
@@ -223,26 +245,20 @@
       { name: "StickyMilk Matcha", img: "placeholder.png" }
     ];
 
-    const order = {
-      customer: "",
-      items: []
-    };
-
+    const order = { customer: "", items: [] };
     let selectedDrink = null;
 
     function loadDrinks() {
-      const container = document.getElementById("drinkButtons");
+      const container = document.getElementById("drinkCarousel");
       drinks.forEach((drink, index) => {
         const btn = document.createElement("div");
         btn.className = "drink-btn";
         btn.dataset.index = index;
-
-        btn.onclick = () => selectDrink(index);
-
         btn.innerHTML = `
           <img src="${drink.img}" alt="${drink.name}">
           <div class="drink-name">${drink.name}</div>
         `;
+        btn.onclick = () => selectDrink(index);
         container.appendChild(btn);
       });
     }
@@ -315,7 +331,6 @@
     function updateOrderList() {
       const ul = document.getElementById("orderList");
       ul.innerHTML = "";
-
       order.items.forEach((item, index) => {
         const li = document.createElement("li");
         li.className = "order-item";
@@ -324,10 +339,7 @@
           <button class="delete-btn" onclick="removeOrderItem(${index})">❌</button>
         `;
         ul.appendChild(li);
-
-        setTimeout(() => {
-          li.classList.add('fade-in');
-        }, 100);
+        setTimeout(() => li.classList.add('fade-in'), 100);
       });
     }
 
@@ -336,7 +348,36 @@
       updateOrderList();
     }
 
+    function autoSelectCenter() {
+      const carousel = document.getElementById("drinkCarousel");
+      const cards = carousel.querySelectorAll('.drink-btn');
+      let minDiff = Infinity;
+      let selectedIndex = 0;
+      const center = carousel.scrollLeft + carousel.offsetWidth / 2;
+
+      cards.forEach((card, index) => {
+        const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+        const diff = Math.abs(center - cardCenter);
+        if (diff < minDiff) {
+          minDiff = diff;
+          selectedIndex = index;
+        }
+      });
+
+      selectDrink(selectedIndex);
+    }
+
+    function debounce(func, wait) {
+      let timeout;
+      return function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(func, wait);
+      };
+    }
+
     loadDrinks();
+    const carousel = document.getElementById("drinkCarousel");
+    carousel.addEventListener('scroll', debounce(autoSelectCenter, 100));
   </script>
 </body>
 </html>
