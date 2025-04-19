@@ -6,6 +6,7 @@
   <title>Electrofuel Kitchen</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+
     body {
       font-family: 'Orbitron', sans-serif;
       background-color: #101d30;
@@ -13,12 +14,14 @@
       margin: 0;
       padding: 20px;
     }
+
     h2 {
       text-align: center;
       font-size: 2em;
       color: #00ffe7;
       text-shadow: 0 0 10px #00ffe7;
     }
+
     .orders, .summary {
       max-width: 900px;
       margin: 20px auto;
@@ -27,6 +30,7 @@
       border-radius: 20px;
       box-shadow: 0 0 15px #00ffe755;
     }
+
     .order {
       background-color: #22334e;
       border-left: 5px solid #00ffe7;
@@ -34,17 +38,21 @@
       margin-bottom: 15px;
       border-radius: 12px;
     }
+
     .order h3 {
       margin: 0 0 10px 0;
       color: #00ffe7;
     }
+
     .order ul {
       list-style: none;
       padding-left: 0;
     }
+
     .order li {
       margin: 5px 0;
     }
+
     .btn {
       margin-top: 10px;
       padding: 8px 14px;
@@ -55,24 +63,30 @@
       font-weight: bold;
       transition: background 0.2s ease;
     }
+
     .finish-btn {
       background: #00ffe7;
       color: #000;
     }
+
     .delete-btn {
       background: #ff5555;
       color: #fff;
       margin-left: 10px;
     }
+
     .finish-btn:hover {
       background: #00cccc;
     }
+
     .delete-btn:hover {
       background: #cc0000;
     }
+
     .summary h3 {
       margin-top: 0;
     }
+
     .clear-summary-btn {
       margin-top: 10px;
       background: #ff9900;
@@ -83,24 +97,40 @@
       cursor: pointer;
       font-weight: bold;
     }
+
     .clear-summary-btn:hover {
       background: #cc7700;
     }
+
     .tts-toggle {
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
-      gap: 10px;
+      display: block;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .tts-toggle button {
+      background: #444;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .tts-toggle button:hover {
+      background: #666;
     }
   </style>
 </head>
 <body>
   <h2>⚡ Electrofuel Kitchen View ⚡</h2>
 
+  <div class="tts-toggle">
+    <button onclick="toggleTTS()">🔊 TTS: <span id="ttsStatus">ON</span></button>
+  </div>
+
   <div class="orders" id="ordersContainer">
-    <div class="tts-toggle">
-      <label><input type="checkbox" id="ttsToggle" checked /> 🔊 Enable Text-to-Speech</label>
-    </div>
     <h3>Pending Orders</h3>
     <p>Loading orders...</p>
   </div>
@@ -114,21 +144,21 @@
   <script>
     const ordersContainer = document.getElementById("ordersContainer");
     const salesSummaryEl = document.getElementById("salesSummary");
-    const ttsToggle = document.getElementById("ttsToggle");
     const salesSummary = {};
     let voices = [];
+    window.ttsEnabled = true;
 
-    window.ttsEnabled = ttsToggle.checked;
-    ttsToggle.addEventListener("change", () => {
-      window.ttsEnabled = ttsToggle.checked;
-    });
+    function toggleTTS() {
+      window.ttsEnabled = !window.ttsEnabled;
+      document.getElementById("ttsStatus").textContent = window.ttsEnabled ? "ON" : "OFF";
+    }
 
     function populateVoices() {
       voices = speechSynthesis.getVoices();
     }
 
     populateVoices();
-    if (typeof speechSynthesis !== "undefined") {
+    if (speechSynthesis.onvoiceschanged !== undefined) {
       speechSynthesis.onvoiceschanged = populateVoices;
     }
 
@@ -137,21 +167,26 @@
 
       const utterance = new SpeechSynthesisUtterance(text);
 
-      // Malay name detection
+      // Detect if the name likely belongs to a Malay name pattern
       const malayKeywords = ["bin", "binti", "ahmad", "mohd", "nur", "aini", "syafiq", "azlan", "hassan"];
       const isMalay = malayKeywords.some(k => nameOnly.toLowerCase().includes(k));
+
+      const femaleVoices = voices.filter(v =>
+        /female|jenny|samantha|karen|zira|lucia|fiona|Google US English/i.test(v.name + v.voiceURI)
+      );
 
       const preferredMalay = ["Google Bahasa Malaysia", "Google Malay"];
       const preferredEnglish = ["Google UK English Female", "Google US English", "Samantha", "Karen", "Microsoft Jenny"];
 
       const selectedVoice =
         (isMalay && voices.find(v => preferredMalay.includes(v.name))) ||
-        voices.find(v => preferredEnglish.includes(v.name)) ||
-        voices.find(v => v.lang.startsWith('en')) ||
+        femaleVoices.find(v => preferredEnglish.includes(v.name)) ||
+        femaleVoices[0] ||
+        voices.find(v => v.lang.startsWith("en")) ||
         voices[0];
 
       utterance.voice = selectedVoice;
-      utterance.rate = 1;
+      utterance.rate = 0.85;
       utterance.pitch = 1;
       utterance.volume = 1;
 
@@ -171,17 +206,7 @@
     }
 
     function renderOrders(orders) {
-      ordersContainer.innerHTML = `
-        <div class="tts-toggle">
-          <label><input type="checkbox" id="ttsToggle" ${window.ttsEnabled ? "checked" : ""}/> 🔊 Enable Text-to-Speech</label>
-        </div>
-        <h3>Pending Orders</h3>
-      `;
-
-      document.getElementById("ttsToggle").addEventListener("change", e => {
-        window.ttsEnabled = e.target.checked;
-      });
-
+      ordersContainer.innerHTML = "<h3>Pending Orders</h3>";
       if (orders.length === 0) {
         ordersContainer.innerHTML += "<p>No pending orders.</p>";
         return;
@@ -213,6 +238,7 @@
       const orders = await res.json();
       const order = orders[index];
 
+      // Update sales summary
       order.items.forEach(item => {
         if (!salesSummary[item.drink]) salesSummary[item.drink] = 0;
         salesSummary[item.drink]++;
@@ -220,11 +246,14 @@
 
       renderSalesSummary();
 
+      // Speak the name
+      speakText(`Order for ${customerName} is ready`, customerName);
+
+      // Delete from backend
       await fetch(`https://fascinated-volcano-thief.glitch.me/order/${index}`, {
         method: 'DELETE'
       });
 
-      speakText(`Order for ${order.customer} is ready`, order.customer);
       fetchOrders();
     }
 
