@@ -1,113 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Electrofuel Kitchen</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
-
-    body {
-      font-family: 'Orbitron', sans-serif;
-      background-color: #101d30;
-      color: #e0f7ff;
-      margin: 0;
-      padding: 20px;
-    }
-
-    h2 {
-      text-align: center;
-      font-size: 2em;
-      color: #00ffe7;
-      text-shadow: 0 0 10px #00ffe7;
-    }
-
-    .orders, .summary {
-      max-width: 900px;
-      margin: 20px auto;
-      background: #1c293f;
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 0 15px #00ffe755;
-    }
-
-    .order {
-      background-color: #22334e;
-      border-left: 5px solid #00ffe7;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 12px;
-    }
-
-    .order h3 {
-      margin: 0 0 10px 0;
-      color: #00ffe7;
-    }
-
-    .order ul {
-      list-style: none;
-      padding-left: 0;
-    }
-
-    .order li {
-      margin: 5px 0;
-    }
-
-    .btn {
-      margin-top: 10px;
-      padding: 8px 14px;
-      font-size: 0.9em;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background 0.2s ease;
-    }
-
-    .finish-btn {
-      background: #00ffe7;
-      color: #000;
-    }
-
-    .delete-btn {
-      background: #ff5555;
-      color: #fff;
-      margin-left: 10px;
-    }
-
-    .finish-btn:hover {
-      background: #00cccc;
-    }
-
-    .delete-btn:hover {
-      background: #cc0000;
-    }
-
-    .summary h3 {
-      margin-top: 0;
-    }
-
-    .clear-summary-btn {
-      margin-top: 10px;
-      background: #ff9900;
-      color: #000;
-      padding: 8px 14px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .clear-summary-btn:hover {
-      background: #cc7700;
-    }
-  </style>
-</head>
+<!-- ... [head section stays the same] ... -->
 <body>
   <h2>⚡ Electrofuel Kitchen View ⚡</h2>
 
   <div class="orders" id="ordersContainer">
     <h3>Pending Orders</h3>
+    <label style="display:block; margin-bottom: 10px;">
+      <input type="checkbox" id="disableTTS" />
+      🔇 Disable TTS
+    </label>
     <p>Loading orders...</p>
   </div>
 
@@ -120,6 +20,7 @@
   <script>
     const ordersContainer = document.getElementById("ordersContainer");
     const salesSummaryEl = document.getElementById("salesSummary");
+    const disableTTS = document.getElementById("disableTTS");
     const salesSummary = {};
 
     async function fetchOrders() {
@@ -134,7 +35,19 @@
     }
 
     function renderOrders(orders) {
-      ordersContainer.innerHTML = "<h3>Pending Orders</h3>";
+      ordersContainer.innerHTML = `
+        <h3>Pending Orders</h3>
+        <label style="display:block; margin-bottom: 10px;">
+          <input type="checkbox" id="disableTTS" ${disableTTS.checked ? "checked" : ""}/>
+          🔇 Disable TTS
+        </label>
+      `;
+
+      // Re-bind after replacing the HTML
+      document.getElementById("disableTTS").addEventListener("change", (e) => {
+        disableTTS.checked = e.target.checked;
+      });
+
       if (orders.length === 0) {
         ordersContainer.innerHTML += "<p>No pending orders.</p>";
         return;
@@ -173,16 +86,17 @@
 
       renderSalesSummary();
 
-      // 🔊 TTS Speak out the order
+      // 🔊 TTS unless disabled
       let message = `Order for ${customerName} is ready. `;
       order.items.forEach(item => {
         message += `${item.drink}`;
-        if (item.note) {
-          message += `. Note: ${item.note}`;
-        }
+        if (item.note) message += `. Note: ${item.note}`;
         message += `. `;
       });
-      speak(message);
+
+      if (!disableTTS.checked) {
+        speak(message);
+      }
 
       await fetch(`https://fascinated-volcano-thief.glitch.me/order/${index}`, {
         method: 'DELETE'
