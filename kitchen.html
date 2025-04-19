@@ -6,7 +6,6 @@
   <title>Electrofuel Kitchen</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
-
     body {
       font-family: 'Orbitron', sans-serif;
       background-color: #101d30;
@@ -14,14 +13,12 @@
       margin: 0;
       padding: 20px;
     }
-
     h2 {
       text-align: center;
       font-size: 2em;
       color: #00ffe7;
       text-shadow: 0 0 10px #00ffe7;
     }
-
     .orders, .summary {
       max-width: 900px;
       margin: 20px auto;
@@ -30,7 +27,6 @@
       border-radius: 20px;
       box-shadow: 0 0 15px #00ffe755;
     }
-
     .order {
       background-color: #22334e;
       border-left: 5px solid #00ffe7;
@@ -38,21 +34,17 @@
       margin-bottom: 15px;
       border-radius: 12px;
     }
-
     .order h3 {
       margin: 0 0 10px 0;
       color: #00ffe7;
     }
-
     .order ul {
       list-style: none;
       padding-left: 0;
     }
-
     .order li {
       margin: 5px 0;
     }
-
     .btn {
       margin-top: 10px;
       padding: 8px 14px;
@@ -63,30 +55,24 @@
       font-weight: bold;
       transition: background 0.2s ease;
     }
-
     .finish-btn {
       background: #00ffe7;
       color: #000;
     }
-
     .delete-btn {
       background: #ff5555;
       color: #fff;
       margin-left: 10px;
     }
-
     .finish-btn:hover {
       background: #00cccc;
     }
-
     .delete-btn:hover {
       background: #cc0000;
     }
-
     .summary h3 {
       margin-top: 0;
     }
-
     .clear-summary-btn {
       margin-top: 10px;
       background: #ff9900;
@@ -97,33 +83,24 @@
       cursor: pointer;
       font-weight: bold;
     }
-
     .clear-summary-btn:hover {
       background: #cc7700;
     }
-
-    .voice-toggle {
-      text-align: center;
-      margin-top: 10px;
-    }
-
-    .voice-toggle input {
-      transform: scale(1.3);
-      margin-right: 10px;
+    .tts-toggle {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 10px;
     }
   </style>
 </head>
 <body>
   <h2>⚡ Electrofuel Kitchen View ⚡</h2>
 
-  <div class="voice-toggle">
-    <label>
-      <input type="checkbox" id="ttsToggle" checked onchange="ttsEnabled = this.checked">
-      🔊 Enable Voice for Names
-    </label>
-  </div>
-
   <div class="orders" id="ordersContainer">
+    <div class="tts-toggle">
+      <label><input type="checkbox" id="ttsToggle" checked /> 🔊 Enable Text-to-Speech</label>
+    </div>
     <h3>Pending Orders</h3>
     <p>Loading orders...</p>
   </div>
@@ -137,28 +114,48 @@
   <script>
     const ordersContainer = document.getElementById("ordersContainer");
     const salesSummaryEl = document.getElementById("salesSummary");
+    const ttsToggle = document.getElementById("ttsToggle");
     const salesSummary = {};
-    let ttsEnabled = true;
-    let selectedVoice = null;
+    let voices = [];
 
-    function loadVoices() {
-      const voices = speechSynthesis.getVoices();
-      selectedVoice = voices.find(v =>
-        v.name.toLowerCase().includes("female") ||
-        v.name.toLowerCase().includes("google") ||
-        v.lang === "en-US"
-      ) || voices[0];
+    window.ttsEnabled = ttsToggle.checked;
+    ttsToggle.addEventListener("change", () => {
+      window.ttsEnabled = ttsToggle.checked;
+    });
+
+    function populateVoices() {
+      voices = speechSynthesis.getVoices();
     }
 
-    speechSynthesis.onvoiceschanged = loadVoices;
-    loadVoices();
+    populateVoices();
+    if (typeof speechSynthesis !== "undefined") {
+      speechSynthesis.onvoiceschanged = populateVoices;
+    }
 
-    function speakName(name) {
-      if (!ttsEnabled || !name) return;
-      const utterance = new SpeechSynthesisUtterance(name);
-      utterance.lang = "en-US";
+    function speakText(text, nameOnly = "") {
+      if (!window.ttsEnabled || !window.speechSynthesis) return;
+
+      const utterance = new SpeechSynthesisUtterance(text);
+
+      // Malay name detection
+      const malayKeywords = ["bin", "binti", "ahmad", "mohd", "nur", "aini", "syafiq", "azlan", "hassan"];
+      const isMalay = malayKeywords.some(k => nameOnly.toLowerCase().includes(k));
+
+      const preferredMalay = ["Google Bahasa Malaysia", "Google Malay"];
+      const preferredEnglish = ["Google UK English Female", "Google US English", "Samantha", "Karen", "Microsoft Jenny"];
+
+      const selectedVoice =
+        (isMalay && voices.find(v => preferredMalay.includes(v.name))) ||
+        voices.find(v => preferredEnglish.includes(v.name)) ||
+        voices.find(v => v.lang.startsWith('en')) ||
+        voices[0];
+
+      utterance.voice = selectedVoice;
       utterance.rate = 1;
-      if (selectedVoice) utterance.voice = selectedVoice;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+
+      speechSynthesis.cancel();
       speechSynthesis.speak(utterance);
     }
 
@@ -174,7 +171,17 @@
     }
 
     function renderOrders(orders) {
-      ordersContainer.innerHTML = "<h3>Pending Orders</h3>";
+      ordersContainer.innerHTML = `
+        <div class="tts-toggle">
+          <label><input type="checkbox" id="ttsToggle" ${window.ttsEnabled ? "checked" : ""}/> 🔊 Enable Text-to-Speech</label>
+        </div>
+        <h3>Pending Orders</h3>
+      `;
+
+      document.getElementById("ttsToggle").addEventListener("change", e => {
+        window.ttsEnabled = e.target.checked;
+      });
+
       if (orders.length === 0) {
         ordersContainer.innerHTML += "<p>No pending orders.</p>";
         return;
@@ -206,8 +213,6 @@
       const orders = await res.json();
       const order = orders[index];
 
-      speakName(order.customer);
-
       order.items.forEach(item => {
         if (!salesSummary[item.drink]) salesSummary[item.drink] = 0;
         salesSummary[item.drink]++;
@@ -219,6 +224,7 @@
         method: 'DELETE'
       });
 
+      speakText(`Order for ${order.customer} is ready`, order.customer);
       fetchOrders();
     }
 
@@ -249,7 +255,6 @@
       renderSalesSummary();
     }
 
-    // Initialize
     fetchOrders();
     setInterval(fetchOrders, 3000);
   </script>
