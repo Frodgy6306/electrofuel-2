@@ -162,13 +162,10 @@
     async function finishOrder(customerName, index) {
       if (!confirm(`Finish order for ${customerName}?`)) return;
 
-      // Fetch current orders
       const res = await fetch('https://fascinated-volcano-thief.glitch.me/order');
       const orders = await res.json();
-
       const order = orders[index];
 
-      // Update sales summary
       order.items.forEach(item => {
         if (!salesSummary[item.drink]) salesSummary[item.drink] = 0;
         salesSummary[item.drink]++;
@@ -176,7 +173,17 @@
 
       renderSalesSummary();
 
-      // Delete from backend
+      // 🔊 TTS Speak out the order
+      let message = `Order for ${customerName} is ready. `;
+      order.items.forEach(item => {
+        message += `${item.drink}`;
+        if (item.note) {
+          message += `. Note: ${item.note}`;
+        }
+        message += `. `;
+      });
+      speak(message);
+
       await fetch(`https://fascinated-volcano-thief.glitch.me/order/${index}`, {
         method: 'DELETE'
       });
@@ -209,6 +216,13 @@
         delete salesSummary[key];
       }
       renderSalesSummary();
+    }
+
+    function speak(text) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      utterance.rate = 1;
+      speechSynthesis.speak(utterance);
     }
 
     fetchOrders();
